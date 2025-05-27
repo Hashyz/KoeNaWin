@@ -258,6 +258,9 @@
                 width: calc(100% - 3rem); /* Adjust width for mobile padding */
             }
         }
+        #currentRoundDisplay{
+            padding-bottom: 20px;
+        }
     </style>
 </head>
 <body>
@@ -272,7 +275,7 @@
         </div>
 
         <div id="roundSelectionContent" class="hidden">
-            <h2 class="text-3xl font-semibold text-header mb-6">ဒီနေ့ ဘယ်နှစ်ပတ်လဲ</h2>
+            <h2 class="text-1xl font-semibold text-header mb-6">ဒီနေ့ ဘယ််အဆင့် ဘယ်နှစ်ပတ်လဲ</h2>
             <p class="text-lg text-secondary mb-5">Please click on the cell that represents your current round today:</p>
             
             <div id="todayRoundGrid" class="round-grid">
@@ -283,7 +286,7 @@
 
         <div class="mb-8">
             <h2 class="text-3xl font-semibold text-header mb-6">Current :</h2>
-            <p id="currentRoundDisplay" class="text-3xl font-extrabold text-primary-display mb-4 leading-none">--</p>
+            <p id="currentRoundDisplay" class="text-4xl font-extrabold text-primary-display mb-4 leading-none">--</p>
             <p id="startDateDisplay" class="text-secondary text-base">Start Date: Not set</p>
             <p id="daysPassedDisplay" class="text-secondary text-base">Days Passed: --</p>
         </div>
@@ -314,6 +317,9 @@
 
         // Days of the week for column labels (repeating)
         const daysOfWeekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue'];
+        const fullDaysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
         const VEGETARIAN_COL_INDEX = 4; // 0-indexed, which is the 5th column
 
         // Map for Burmese round names
@@ -342,6 +348,16 @@
             9: "၉"
         };
 
+        // Helper function to get ordinal suffix (e.g., 1st, 2nd, 3rd, 4th)
+        function getOrdinalSuffix(day) {
+            if (day > 3 && day < 21) return 'th'; // Handles 11th, 12th, 13th
+            switch (day % 10) {
+                case 1: return 'st';
+                case 2: return 'nd';
+                case 3: return 'rd';
+                default: return 'th';
+            }
+        }
 
         // Get DOM elements
         const startDateInput = document.getElementById('startDate');
@@ -392,7 +408,7 @@
                     messageBox.classList.add('hidden');
                     messageBox.removeEventListener('transitionend', handler);
                 }, { once: true }); // Use { once: true } to ensure listener is removed after one use
-            }, 3000); // Changed timeout to 3 seconds
+            }, 80000); // Changed timeout to 3 seconds
         }
 
         // Function to calculate the round
@@ -469,7 +485,17 @@
                     } else { 
                         daysUntilNextVegDay = (numCols - colIndex) + VEGETARIAN_COL_INDEX;
                     }
-                    showMessage(`Vegetarian Day in ${daysUntilNextVegDay} day(s)! 🥦`, 'info'); 
+                    
+                    // Calculate the exact date for the next Vegetarian Day
+                    const nextVegDate = new Date(today);
+                    nextVegDate.setDate(today.getDate() + daysUntilNextVegDay);
+
+                    const dayOfWeek = fullDaysOfWeek[nextVegDate.getDay()]; // getDay() returns 0 for Sunday
+                    const monthName = months[nextVegDate.getMonth()];
+                    const dayOfMonth = nextVegDate.getDate();
+                    const ordinalSuffix = getOrdinalSuffix(dayOfMonth);
+
+                    showMessage(`Vegetarian Day on ${dayOfWeek}, ${monthName} ${dayOfMonth}${ordinalSuffix}! 🥦`, 'info'); 
                 }
             }
         }
@@ -509,8 +535,8 @@
                     const roundText = numberToTextMap[roundNumber] || ''; // Fallback to empty string
                     const roundMyanmarNumeral = numberToTextinMM[roundNumber] || roundNumber; // Fallback to Arabic
 
-                    // cellButton.textContent = `${roundMyanmarNumeral} ${roundText}`; // Display Myanmar numeral and Burmese text
                     cellButton.textContent = `${roundMyanmarNumeral}`; // Display Myanmar numeral and Burmese text
+                    // cellButton.textContent = `${roundMyanmarNumeral} ${roundText}`; // Display Myanmar numeral and Burmese text
 
                     cellButton.dataset.row = r; 
                     cellButton.dataset.col = c; 
