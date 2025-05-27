@@ -275,7 +275,7 @@
         </div>
 
         <div id="roundSelectionContent" class="hidden">
-            <h2 class="text-1xl font-semibold text-header mb-6">ဒီနေ့ ဘယ််အဆင့် ဘယ်နှစ်ပတ်လဲ</h2>
+            <h2 class="text-1xl font-semibold text-header mb-6">ဒီနေ့ ဘယ််အဆင့် ဘယ်နှပတ်လဲ</h2>
             <p class="text-lg text-secondary mb-5">Please click on the cell that represents your current round today:</p>
             
             <div id="todayRoundGrid" class="round-grid">
@@ -465,7 +465,7 @@
             const currentRoundMyanmarNumeral = numberToTextinMM[currentRoundNumber] || currentRoundNumber; // Fallback to Arabic if not found
 
             // Display Myanmar numeral and Burmese text
-            currentRoundDisplay.textContent = `${currentRoundMyanmarNumeral} ${currentRoundText}`; 
+            currentRoundDisplay.textContent = `${currentRoundText} ${currentRoundMyanmarNumeral} ပတ်`; 
             startDateDisplay.textContent = `Start Date: ${new Date(storedStartDate).toLocaleDateString('en-GB')}`;
             daysPassedDisplay.textContent = `Days Passed: ${daysPassed}`;
 
