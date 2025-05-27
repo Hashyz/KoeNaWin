@@ -1,47 +1,15 @@
 // sw.js (Service Worker file)
 
-const CACHE_NAME = 'daily-round-tracker-v2'; // IMPORTANT: Increment cache version after changes!
+const CACHE_NAME = 'daily-round-tracker-v3'; // IMPORTANT: Increment cache version after changes!
 const urlsToCache = [
   '/', // Caches the root HTML file for your GitHub Pages project
   '/KoeNaWin/', // If your project is in a subfolder, include this as the start URL
   '/KoeNaWin/index.html', // Specific path to your index.html
-  // '/KoeNaWin/icons/icon-192x192.png', // Assuming you've created these
+  '/KoeNaWin/manifest.json', // Manifest file
+  // Add paths to your icon files here if you have them:
+  // '/KoeNaWin/icons/icon-192x192.png',
   // '/KoeNaWin/icons/icon-512x512.png',
-  // IMPORTANT: Remove the direct CDN link from here
-  // 'https://cdn.tailwindcss.com/', // <-- REMOVE THIS LINE
-  // 'https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap', // <-- REMOVE THIS LINE
 ];
-
-// Cache all external resources on fetch, for a "cache-first, then network" strategy
-// This is a common strategy for external assets like CDNs.
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request).then(response => {
-      // If we have a cached response, return it
-      if (response) {
-        return response;
-      }
-      // Otherwise, try to fetch from the network
-      return fetch(event.request).then(
-        fetchResponse => {
-          // If we get a valid response, and it's for a non-opaque (cacheable) resource
-          if (!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type === 'opaque') {
-            return fetchResponse;
-          }
-          // IMPORTANT: Clone the response. A response is a stream
-          // and can only be consumed once.
-          const responseToCache = fetchResponse.clone();
-          caches.open(CACHE_NAME)
-            .then(cache => {
-              cache.put(event.request, responseToCache);
-            });
-          return fetchResponse;
-        }
-      );
-    })
-  );
-});
-
 
 // Install event: Caches your OWN essential app shell files
 self.addEventListener('install', event => {
@@ -60,7 +28,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// Activate event: Cleans up old caches (this remains the same)
+// Activate event: Cleans up old caches
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys().then(cacheNames => {
@@ -74,5 +42,42 @@ self.addEventListener('activate', event => {
       );
     })
     .then(() => self.clients.claim())
+  );
+});
+
+// Fetch event: Intercepts network requests and implements cache-first strategy
+self.addEventListener('fetch', event => {
+  // IMPORTANT: Only process http/https requests, ignore chrome-extension://, etc.
+  if (!event.request.url.startsWith('http')) {
+    return; // Skip non-http(s) requests
+  }
+
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Cache hit - return response
+        if (response) {
+          return response;
+        }
+        // No cache hit - fetch from network
+        return fetch(event.request).then(
+          fetchResponse => {
+            // Check if we received a valid response that is cacheable
+            if(!fetchResponse || fetchResponse.status !== 200 || fetchResponse.type === 'opaque') {
+              return fetchResponse;
+            }
+            // IMPORTANT: Clone the response. A response is a stream
+            // and can only be consumed once.
+            const responseToCache = fetchResponse.clone();
+
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+
+            return fetchResponse;
+          }
+        );
+      })
   );
 });
