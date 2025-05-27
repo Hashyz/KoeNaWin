@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ကိုးနဝင်း မိုးလင်းမှသိမယ်</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Base styles for a peaceful aesthetic */
+        body {
+            font-family: 'Quicksand', sans-serif; /* Soft, rounded font */
+            background: linear-gradient(135deg, #F0F4F8 0%, #E6EEF3 100%); /* Subtle gradient background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 2.5rem; /* Generous padding around the main container */
+            box-sizing: border-box; /* Include padding in element's total width and height */
+            color: #334155; /* Default text color for body */
+        }
+
+        /* Main container styling */
+        .container {
+            background-color: #FFFFFF; /* Clean white background for the card */
+            padding: 3.5rem; /* Increased padding for more internal whitespace */
+            border-radius: 2rem; /* Even more rounded corners for softness */
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05); /* Softer, larger shadow */
+            width: 100%;
+            max-width: 700px; /* Wider to accommodate the grid labels */
+            text-align: center;
+            border: 1px solid rgba(220, 220, 220, 0.3); /* Very subtle, almost invisible border */
+            transition: all 0.3s ease-in-out; /* Smooth transitions for any dynamic changes */
+        }
+
+        /* Input fields styling */
+        input[type="date"] {
+            border: 1px solid #DCE3E8; /* Soft border color */
+            padding: 0.95rem 1.4rem; /* More padding for a comfortable feel */
+            border-radius: 1rem; /* More rounded input fields */
+            width: 100%;
+            box-sizing: border-box;
+            margin-bottom: 1.5rem; /* Increased spacing below inputs */
+            font-size: 1.15rem; /* Slightly larger font for better readability */
+            color: #4A5568; /* Soft dark gray text */
+            transition: all 0.3s ease-in-out; /* Smooth transitions for focus states */
+        }
+        input[type="date"]:focus {
+            outline: none;
+            border-color: #8AB6A4; /* Peaceful green for focus border */
+            box-shadow: 0 0 0 4px rgba(138, 182, 164, 0.4); /* Softer, more prominent focus glow */
+        }
+
+        /* Text color utility classes */
+        .text-header {
+            color: #334155; /* Dark slate for main headings */
+        }
+        .text-primary-display {
+            color: #62A48D; /* A peaceful, inviting green for the main number */
+        }
+        /* Class for vegetarian day highlight */
+        .text-vegetarian {
+            color: #EF4444; /* Red color for vegetarian day highlight */
+        }
+        .text-secondary {
+            color: #64748B; /* Muted gray for supporting information */
+        }
+
+        /* Message box styling */
+        .message-box {
+            padding: 1.2rem; /* More padding for message box */
+            border-radius: 1rem; /* More rounded corners */
+            font-size: 1rem; /* Slightly larger font size */
+            text-align: left;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03); /* Very subtle shadow */
+            opacity: 0; /* Start hidden for animation */
+            transform: translateY(-20px); /* Start slightly ABOVE for slide-down effect */
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Smooth transitions */
+            pointer-events: none; /* Initially no interaction */
+
+            /* Global fixed positioning for pop-up effect */
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px); /* Combine initial transform */
+            z-index: 1000; /* Ensure it's on top */
+            width: calc(100% - 5rem); /* Adjust width to match container, minus padding */
+            max-width: 660px; /* Max width to align with container */
+        }
+        /* State for showing the message box */
+        .message-box.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0); /* Slide to its natural position */
+            pointer-events: auto; /* Enable interaction when shown */
+        }
+        /* State for hiding the message box */
+        .message-box.hide {
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px); /* Slide back up when hiding */
+            pointer-events: none; /* Disable interaction when hiding */
+        }
+
+        /* Info/Success Message Theme (Green) */
+        .message-box.info {
+            background-color: #E6F3EF; /* Very light green background */
+            color: #4CAF50; /* A calm green for info text */
+            border: 1px solid #C8E6C9; /* Subtle border */
+        }
+        /* Error/Warning Message Theme (Orange) */
+        .message-box.error {
+            background-color: #FFF3CD; /* Light orange background */
+            color: #D97706; /* Darker orange text */
+            border: 1px solid #FBBF24; /* Orange border */
+        }
+
+        /* "Forget" link styling */
+        .reset-link {
+            display: inline-block;
+            margin-top: 1.2rem; /* Increased top margin */
+            color: #64748B; /* Soft gray for the link */
+            text-decoration: underline;
+            cursor: pointer;
+            font-size: 0.95rem; /* Slightly larger font */
+            transition: color 0.2s ease-in-out;
+        }
+        .reset-link:hover {
+            color: #334155; /* Darker on hover */
+        }
+
+        /* Back button styling */
+        .back-button {
+            background-color: #E2E8F0; /* Light gray background */
+            color: #4A5568; /* Soft dark gray text */
+            padding: 0.9rem 1.5rem; /* Good padding */
+            border-radius: 1rem; /* More rounded corners */
+            font-weight: 600; /* Medium bold text */
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            width: 100%;
+            margin-top: 1.2rem; /* Increased top top margin */
+            border: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+        }
+        .back-button:hover {
+            background-color: #CBD5E0; /* Slightly darker on hover */
+            transform: translateY(-1px); /* Subtle lift */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+        }
+        .back-button:active {
+            background-color: #94A3B8;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Grid for round selection */
+        .round-grid {
+            display: grid;
+            grid-template-columns: auto repeat(9, 1fr); /* Auto for row labels, 9 equal columns for data */
+            gap: 0.3rem; /* Small gap between cells */
+            margin-top: 1.5rem;
+            max-width: 100%; /* Ensure it fits within container */
+            overflow-x: auto; /* Allow horizontal scroll if grid is too wide on small screens */
+            padding-bottom: 0.5rem; /* Space for scrollbar */
+            border: 1px solid #DCE3E8; /* Overall grid border */
+            border-radius: 1rem;
+            padding: 0.5rem;
+            box-shadow: inset 0 0 5px rgba(0,0,0,0.02); /* Inner subtle shadow */
+        }
+        .grid-label {
+            background-color: #F8FAFC; /* Very light background for labels */
+            color: #64748B; /* Muted gray for label text */
+            padding: 0.5rem 0.2rem; /* Padding for labels */
+            font-size: 0.85rem; /* Smaller font for labels */
+            font-weight: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 0.3rem; /* Slightly rounded corners for labels */
+            text-transform: uppercase; /* Uppercase for day labels */
+        }
+        .grid-label.corner {
+            background-color: transparent; /* Top-left corner is transparent */
+            border: none;
+        }
+        .round-grid-cell {
+            background-color: #E6F3EF; /* Light green background for cells */
+            color: #4A5568; /* Dark gray text */
+            padding: 0.75rem 0.5rem; /* Padding within cells */
+            border-radius: 0.5rem; /* Rounded corners for cells */
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            border: 1px solid #C8E6C9; /* Subtle border */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 1 / 1; /* Keep cells square */
+            min-width: 45px; /* Minimum width for cells */
+        }
+        .round-grid-cell:hover {
+            background-color: #D1E8E0; /* Slightly darker green on hover */
+            color: #334155;
+            transform: translateY(-2px); /* Subtle lift */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+        }
+        .round-grid-cell:active {
+            background-color: #A9D1C2;
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem; /* Reduce padding on smaller screens */
+                border-radius: 1.25rem;
+                max-width: 95%; /* Allow it to take more width on smaller screens */
+            }
+            h1 {
+                font-size: 2.2rem; /* Adjust heading size */
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            input[type="date"] {
+                font-size: 0.95rem;
+                padding: 0.65rem 1rem;
+                margin-bottom: 0.8rem;
+            }
+            .text-7xl { /* Adjust main round number size */
+                font-size: 4rem;
+            }
+            .text-lg {
+                font-size: 1rem;
+            }
+            .round-grid {
+                /* Adjust grid columns to be more flexible on small screens */
+                grid-template-columns: auto repeat(9, minmax(28px, 1fr)); /* Smaller min-width for cells */
+                gap: 0.15rem; /* Smaller gap */
+                padding: 0.2rem;
+            }
+            .round-grid-cell {
+                font-size: 0.75rem; /* Smaller font for cells */
+                padding: 0.3rem;
+                min-width: 28px; /* Adjusted min-width */
+            }
+            .grid-label {
+                font-size: 0.6rem; /* Smaller font for labels */
+                padding: 0.2rem 0.05rem;
+            }
+            .back-button {
+                padding: 0.7rem 1rem;
+                font-size: 0.9rem;
+            }
+            .message-box {
+                width: calc(100% - 3rem); /* Adjust width for mobile padding */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-4xl font-bold text-header mb-10">ကိုးနဝင်း မိုးလင်းမှသိမယ်</h1>
+
+        <div id="mainContent" class="mb-8">
+            <label for="startDate" class="block text-header text-lg font-semibold mb-3">Set Your Starting Day:</label>
+            <input type="date" id="startDate" class="shadow-sm">
+            <p class="text-base text-secondary mt-1">Select a date, and it will be saved automatically for your next visit.</p>
+            <span id="forgetLink" class="reset-link">Forget your started day?</span>
+        </div>
+
+        <div id="roundSelectionContent" class="hidden">
+            <h2 class="text-3xl font-semibold text-header mb-6">ဒီနေ့ ဘယ်နှစ်ပတ်လဲ</h2>
+            <p class="text-lg text-secondary mb-5">Please click on the cell that represents your current round today:</p>
+            
+            <div id="todayRoundGrid" class="round-grid">
+                </div>
+            
+            <button id="backToMainBtn" class="back-button">Back to Main</button>
+        </div>
+
+        <div class="mb-8">
+            <h2 class="text-3xl font-semibold text-header mb-6">Current :</h2>
+            <p id="currentRoundDisplay" class="text-3xl font-extrabold text-primary-display mb-4 leading-none">--</p>
+            <p id="startDateDisplay" class="text-secondary text-base">Start Date: Not set</p>
+            <p id="daysPassedDisplay" class="text-secondary text-base">Days Passed: --</p>
+        </div>
+
+        <div class="mt-6 mb-4 flex justify-center">
+            <label class="inline-flex items-center text-secondary cursor-pointer">
+                <input type="checkbox" id="vegAlertsCheckbox" class="form-checkbox h-5 w-5 text-green-600 rounded-md focus:ring-green-500">
+                <span class="ml-2 text-base font-medium">Enable Vegetarian Day Alerts</span>
+            </label>
+        </div>
+
+    </div>
+    <div id="messageBox" class="message-box hidden"></div>
+
+    <script>
+        // Define the 9x9 grid for rounds.
+        const roundGrid = [
+            [2, 9, 4, 7, 5, 3, 6, 1, 8],
+            [3, 1, 5, 8, 6, 4, 7, 2, 9],
+            [4, 2, 6, 9, 7, 5, 8, 3, 1],
+            [5, 3, 7, 1, 8, 6, 9, 4, 2],
+            [6, 4, 8, 2, 9, 7, 1, 5, 3],
+            [7, 5, 9, 3, 1, 8, 2, 6, 4],
+            [8, 6, 1, 4, 2, 9, 3, 7, 5],
+            [9, 7, 2, 5, 3, 1, 4, 8, 6],
+            [1, 8, 3, 6, 4, 2, 5, 9, 7]
+        ];
+
+        // Days of the week for column labels (repeating)
+        const daysOfWeekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue'];
+        const VEGETARIAN_COL_INDEX = 4; // 0-indexed, which is the 5th column
+
+        // Map for Burmese round names
+        const numberToTextMap = {
+            1: "အရဟံ",
+            2: "သမ္ပာသမ္ဗုဒ္ဓေါ",
+            3: "ဝိဇ္ဇာစရဏသမ္ပန္နော",
+            4: "သုဂတော",
+            5: "လောကဝိဒူ",
+            6: "အနုတ္တရောပုရိသ ဓမ္မသာရထိ",
+            7: "သတ္ထာဒေဝ မနုဿာနံ",
+            8: "ဗုဒ္ဓေါ",
+            9: "ဘဂဝါ"
+        };
+        
+        // Map for Myanmar numerals
+        const numberToTextinMM = {
+            1: "၁",
+            2: "၂",
+            3: "၃",
+            4: "၄",
+            5: "၅",
+            6: "၆",
+            7: "၇",
+            8: "၈",
+            9: "၉"
+        };
+
+
+        // Get DOM elements
+        const startDateInput = document.getElementById('startDate');
+        const currentRoundDisplay = document.getElementById('currentRoundDisplay');
+        const startDateDisplay = document.getElementById('startDateDisplay');
+        const daysPassedDisplay = document.getElementById('daysPassedDisplay');
+        const messageBox = document.getElementById('messageBox'); // This is now a global element
+        const forgetLink = document.getElementById('forgetLink');
+        const mainContent = document.getElementById('mainContent');
+        const roundSelectionContent = document.getElementById('roundSelectionContent');
+        const todayRoundGrid = document.getElementById('todayRoundGrid');
+        const backToMainBtn = document.getElementById('backToMainBtn');
+        const vegAlertsCheckbox = document.getElementById('vegAlertsCheckbox'); 
+
+        // Function to show messages with animation
+        function showMessage(message, type = 'info') {
+            messageBox.textContent = message;
+            // Remove all type classes first
+            messageBox.classList.remove('error', 'info'); 
+            // Add the new type class
+            messageBox.classList.add(type);
+            
+            // Ensure it's hidden (display: none) before starting animation
+            // This is crucial to reset the transition
+            messageBox.classList.add('hidden'); 
+            // Remove 'show' state if it was there
+            messageBox.classList.remove('show');
+            // Set initial animation state (opacity 0, transform -20px)
+            messageBox.classList.add('hide');
+
+
+            // Force reflow to apply the initial 'hide' state immediately
+            // before changing to 'show' state. This makes the transition work.
+            void messageBox.offsetWidth; 
+
+            // Remove 'hidden' to make it displayable (e.g., display: block)
+            messageBox.classList.remove('hidden');
+            // Add 'show' class to trigger fade-in/slide-down animation
+            messageBox.classList.remove('hide');
+            messageBox.classList.add('show');
+            
+            // Hide message after 3 seconds
+            setTimeout(() => {
+                messageBox.classList.remove('show');
+                messageBox.classList.add('hide');
+                // Fully hide after animation completes
+                messageBox.addEventListener('transitionend', function handler() {
+                    messageBox.classList.add('hidden');
+                    messageBox.removeEventListener('transitionend', handler);
+                }, { once: true }); // Use { once: true } to ensure listener is removed after one use
+            }, 3000); // Changed timeout to 3 seconds
+        }
+
+        // Function to calculate the round
+        function calculateRound() {
+            const storedStartDate = localStorage.getItem('startDate');
+
+            if (!storedStartDate) {
+                currentRoundDisplay.textContent = '--';
+                startDateDisplay.textContent = 'Start Date: Not set';
+                daysPassedDisplay.textContent = 'Days Passed: --';
+                // Only show initial message if no date is set and not in round selection mode
+                // Also, show message in the appropriate messageBox location
+                if (!startDateInput.value && roundSelectionContent.classList.contains('hidden')) {
+                    // If in main view and no date, show message
+                     showMessage('Please select your starting day, or click "Forget your started day?" to set today\'s round.', 'info');
+                } else if (!startDateInput.value && !roundSelectionContent.classList.contains('hidden')) {
+                    // If in round selection view and no date, show message there
+                    showMessage('Please click on the cell that represents your current round today. The calculated start date must be a Monday.', 'info');
+                }
+                currentRoundDisplay.classList.remove('text-vegetarian'); // Clear any previous highlights
+                return;
+            }
+
+            const startDate = new Date(storedStartDate);
+            startDate.setHours(0, 0, 0, 0); 
+
+            const today = new Date();
+            today.setHours(0, 0, 0, 0); 
+
+            const timeDifference = today.getTime() - startDate.getTime();
+            const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+            if (daysPassed < 0) {
+                currentRoundDisplay.textContent = 'N/A';
+                startDateDisplay.textContent = `Start Date: ${new Date(storedStartDate).toLocaleDateString('en-GB')}`;
+                daysPassedDisplay.textContent = `Days Passed: ${daysPassed} (Future date)`;
+                showMessage('The start date is in the future. Please select a past or current date.', 'error');
+                currentRoundDisplay.classList.remove('text-vegetarian');
+                return;
+            }
+
+            const numRows = roundGrid.length;
+            const numCols = roundGrid[0].length;
+            const totalCells = numRows * numCols;
+
+            const gridIndex = daysPassed % totalCells;
+            const rowIndex = Math.floor(gridIndex / numCols);
+            const colIndex = gridIndex % numCols;
+
+            const currentRoundNumber = roundGrid[rowIndex][colIndex];
+            // Get Burmese text name
+            const currentRoundText = numberToTextMap[currentRoundNumber] || ''; 
+            // Get Myanmar numeral
+            const currentRoundMyanmarNumeral = numberToTextinMM[currentRoundNumber] || currentRoundNumber; // Fallback to Arabic if not found
+
+            // Display Myanmar numeral and Burmese text
+            currentRoundDisplay.textContent = `${currentRoundMyanmarNumeral} ${currentRoundText}`; 
+            startDateDisplay.textContent = `Start Date: ${new Date(storedStartDate).toLocaleDateString('en-GB')}`;
+            daysPassedDisplay.textContent = `Days Passed: ${daysPassed}`;
+
+            // --- Vegetarian Day Logic ---
+            const vegAlertsEnabled = vegAlertsCheckbox.checked; 
+
+            currentRoundDisplay.classList.remove('text-vegetarian'); 
+
+            if (vegAlertsEnabled) {
+                if (colIndex === VEGETARIAN_COL_INDEX) {
+                    currentRoundDisplay.classList.add('text-vegetarian'); 
+                    showMessage("Today is Vegetarian Day! 🥦", 'info'); 
+                } else {
+                    let daysUntilNextVegDay;
+                    if (colIndex < VEGETARIAN_COL_INDEX) {
+                        daysUntilNextVegDay = VEGETARIAN_COL_INDEX - colIndex;
+                    } else { 
+                        daysUntilNextVegDay = (numCols - colIndex) + VEGETARIAN_COL_INDEX;
+                    }
+                    showMessage(`Vegetarian Day in ${daysUntilNextVegDay} day(s)! 🥦`, 'info'); 
+                }
+            }
+        }
+
+        // Populate the 9x9 grid with clickable cells and labels
+        function populateRoundGridButtons() {
+            todayRoundGrid.innerHTML = ''; 
+            const numRows = roundGrid.length;
+            const numCols = roundGrid[0].length;
+
+            // Add top-left empty corner
+            const cornerDiv = document.createElement('div');
+            cornerDiv.classList.add('grid-label', 'corner');
+            todayRoundGrid.appendChild(cornerDiv);
+
+            // Add column headers (Days of the Week)
+            daysOfWeekLabels.forEach(day => {
+                const dayLabel = document.createElement('div');
+                dayLabel.classList.add('grid-label');
+                dayLabel.textContent = day;
+                todayRoundGrid.appendChild(dayLabel);
+            });
+
+            // Add rows with labels and cells
+            for (let r = 0; r < numRows; r++) {
+                // Add row label
+                const rowLabel = document.createElement('div');
+                rowLabel.classList.add('grid-label');
+                rowLabel.textContent = `Row ${r + 1}`; 
+                todayRoundGrid.appendChild(rowLabel);
+
+                // Add cells for the current row
+                for (let c = 0; c < numCols; c++) {
+                    const cellButton = document.createElement('button');
+                    cellButton.classList.add('round-grid-cell');
+                    const roundNumber = roundGrid[r][c];
+                    const roundText = numberToTextMap[roundNumber] || ''; // Fallback to empty string
+                    const roundMyanmarNumeral = numberToTextinMM[roundNumber] || roundNumber; // Fallback to Arabic
+
+                    // cellButton.textContent = `${roundMyanmarNumeral} ${roundText}`; // Display Myanmar numeral and Burmese text
+                    cellButton.textContent = `${roundMyanmarNumeral}`; // Display Myanmar numeral and Burmese text
+
+                    cellButton.dataset.row = r; 
+                    cellButton.dataset.col = c; 
+                    todayRoundGrid.appendChild(cellButton);
+                }
+            }
+        }
+
+        // Event listener for changes in the start date input
+        startDateInput.addEventListener('change', () => {
+            const selectedDateString = startDateInput.value;
+            if (selectedDateString) {
+                const selectedDate = new Date(selectedDateString);
+                // getDay() returns 0 for Sunday, 1 for Monday, ..., 6 for Saturday
+                if (selectedDate.getDay() !== 1) { // Check if it's not Monday
+                    showMessage('The start day must be a Monday of the week. Please select a Monday.', 'error');
+                    startDateInput.value = ''; // Clear the invalid input
+                    localStorage.removeItem('startDate'); // Ensure no invalid date is saved
+                    calculateRound(); // Update display to "Not set"
+                    return; // Stop further processing
+                }
+
+                localStorage.setItem('startDate', selectedDateString);
+                showMessage('Start date saved automatically!', 'info');
+                calculateRound();
+            } else {
+                localStorage.removeItem('startDate');
+                showMessage('Start date cleared. Please select a new date.', 'error');
+                calculateRound();
+            }
+        });
+
+        // Event listener for "Forget your started day?" link
+        forgetLink.addEventListener('click', () => {
+            localStorage.removeItem('startDate'); 
+            startDateInput.value = ''; 
+            calculateRound(); 
+            
+            mainContent.classList.add('hidden');
+            roundSelectionContent.classList.remove('hidden');
+            showMessage('Please click on the cell that represents your current round today. The calculated start date must be a Monday.', 'info');
+            populateRoundGridButtons(); 
+        });
+
+        // Event listener for clicks on the 9x9 round grid
+        todayRoundGrid.addEventListener('click', (event) => {
+            const target = event.target;
+            if (target.classList.contains('round-grid-cell')) {
+                const selectedRow = parseInt(target.dataset.row); 
+                const selectedCol = parseInt(target.dataset.col); 
+
+                const numCols = roundGrid[0].length;
+                const daysPassedForToday = selectedRow * numCols + selectedCol - 1; 
+                
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); 
+
+                const newStartDate = new Date(today); 
+                newStartDate.setDate(today.getDate() - daysPassedForToday); 
+
+                // Validate if the calculated newStartDate is a Monday
+                if (newStartDate.getDay() - 1 !== 1) { // 1 for Monday
+                    showMessage('The selected cell would result in a start day that is not a Monday. Please choose a different cell.', 'error');
+                    // Do not save or transition back to main content
+                    return; 
+                }
+
+                const newStartDateFormatted = newStartDate.toISOString().split('T')[0];
+
+                localStorage.setItem('startDate', newStartDateFormatted);
+                startDateInput.value = newStartDateFormatted; 
+                
+                roundSelectionContent.classList.add('hidden');
+                mainContent.classList.remove('hidden');
+                
+                showMessage('Start date updated based on your chosen round!', 'info');
+                calculateRound(); 
+            }
+        });
+
+        // Event listener for "Back" button
+        backToMainBtn.addEventListener('click', () => {
+            roundSelectionContent.classList.add('hidden');
+            mainContent.classList.remove('hidden');
+            calculateRound(); 
+            showMessage('Returned to main view.', 'info');
+        });
+
+        // Load/Save Vegetarian Alerts Preference
+        function loadVegAlertsPreference() {
+            const enabled = localStorage.getItem('vegAlertsEnabled');
+            if (enabled !== null) { 
+                vegAlertsCheckbox.checked = (enabled === 'true');
+            } else {
+                vegAlertsCheckbox.checked = true;
+                localStorage.setItem('vegAlertsEnabled', 'true');
+            }
+        }
+
+        function saveVegAlertsPreference() {
+            localStorage.setItem('vegAlertsEnabled', vegAlertsCheckbox.checked);
+            calculateRound(); 
+        }
+
+        // Event listener for checkbox change
+        vegAlertsCheckbox.addEventListener('change', saveVegAlertsPreference);
+
+        // Initialize on page load
+        window.onload = () => {
+            loadVegAlertsPreference(); 
+            const storedStartDate = localStorage.getItem('startDate');
+            if (storedStartDate) {
+                startDateInput.value = storedStartDate;
+                mainContent.classList.remove('hidden');
+                roundSelectionContent.classList.add('hidden');
+            } else {
+                mainContent.classList.remove('hidden');
+                roundSelectionContent.classList.add('hidden');
+            }
+            calculateRound(); 
+        };
+    </script>
+</body>
+</html>
