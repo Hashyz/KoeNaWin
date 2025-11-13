@@ -1,14 +1,13 @@
 // sw.js (Service Worker file)
 
-const CACHE_NAME = 'daily-round-tracker-v3'; // IMPORTANT: Increment cache version after changes!
+const CACHE_NAME = 'daily-round-tracker-v4'; // IMPORTANT: Increment cache version after changes!
 const urlsToCache = [
-  '/', // Caches the root HTML file for your GitHub Pages project
-  '/KoeNaWin/', // If your project is in a subfolder, include this as the start URL
-  '/KoeNaWin/index.html', // Specific path to your index.html
-  '/KoeNaWin/manifest.json', // Manifest file
+  '/',
+  '/index.html',
+  '/manifest.json',
   // Add paths to your icon files here if you have them:
-  // '/KoeNaWin/icons/icon-192x192.png',
-  // '/KoeNaWin/icons/icon-512x512.png',
+  // '/icons/icon-192x192.png',
+  // '/icons/icon-512x512.png',
 ];
 
 // Install event: Caches your OWN essential app shell files

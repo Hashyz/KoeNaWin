@@ -1,0 +1,13 @@
+# Replit
+.replit
+.config/
+.upm/
+.cache/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
