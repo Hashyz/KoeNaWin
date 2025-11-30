@@ -708,15 +708,17 @@
         <h1 class="text-2xl font-bold text-header mb-8">ကိုးနဝင်း မိုးလင်းမှသိမယ်</h1>
 
         <div id="mainContent" class="mb-8">
-            <label for="startDate" class="block text-header text-lg font-semibold mb-3">Set Your Starting Monday:</label>
-            <input type="date" id="startDate" class="shadow-sm">
-            <p class="text-base text-secondary mt-1">Select a <strong>Monday</strong> as your starting day.</p>
-            
-            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
-                <p class="text-secondary text-sm mb-3">Or set your current round directly:</p>
-                <button id="setTodayRoundBtn" class="action-button" style="background-color: var(--accent-green); color: white;">
-                    Set Today's Round
-                </button>
+            <div id="setupSection">
+                <label for="startDate" class="block text-header text-lg font-semibold mb-3">Set Your Starting Monday:</label>
+                <input type="date" id="startDate" class="shadow-sm">
+                <p class="text-base text-secondary mt-1">Select a <strong>Monday</strong> as your starting day.</p>
+                
+                <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                    <p class="text-secondary text-sm mb-3">Or set your current round directly:</p>
+                    <button id="setTodayRoundBtn" class="action-button" style="background-color: var(--accent-green); color: white;">
+                        Set Today's Round
+                    </button>
+                </div>
             </div>
             
             <span id="forgetLink" class="reset-link" style="display: none;">Reset start date</span>
@@ -848,6 +850,7 @@
         const daysPassedDisplay = document.getElementById('daysPassedDisplay');
         const messageBox = document.getElementById('messageBox');
         const forgetLink = document.getElementById('forgetLink');
+        const setupSection = document.getElementById('setupSection');
         const setTodayRoundBtn = document.getElementById('setTodayRoundBtn');
         const mainContent = document.getElementById('mainContent');
         const roundSelectionContent = document.getElementById('roundSelectionContent');
@@ -1026,6 +1029,8 @@
                 currentRoundDisplay.textContent = '--';
                 startDateDisplay.textContent = 'Start Date: Not set';
                 daysPassedDisplay.textContent = 'Days Passed: --';
+                setupSection.style.display = 'block';
+                forgetLink.style.display = 'none';
                 if (!startDateInput.value && roundSelectionContent.classList.contains('hidden')) {
                     showMessage('Please select your starting day to begin tracking.', 'info');
                 }
@@ -1034,6 +1039,9 @@
                 updateHistoryDisplay();
                 return;
             }
+            
+            setupSection.style.display = 'none';
+            forgetLink.style.display = 'inline-block';
 
             const startParts = storedStartDate.split('-');
             const startDate = new Date(parseInt(startParts[0]), parseInt(startParts[1]) - 1, parseInt(startParts[2]));
