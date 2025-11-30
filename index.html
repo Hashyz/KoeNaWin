@@ -3,269 +3,584 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#62A48D">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <link rel="manifest" href="/manifest.json">
+    <link rel="icon" type="image/png" sizes="192x192" href="/icons/icon-192x192.png">
+    <link rel="apple-touch-icon" href="/icons/icon-192x192.png">
     <title>ကိုးနဝင်း မိုးလင်းမှသိမယ်</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Base styles for a peaceful aesthetic */
+        :root {
+            --bg-primary: #F0F4F8;
+            --bg-secondary: #E6EEF3;
+            --bg-card: #FFFFFF;
+            --text-primary: #334155;
+            --text-secondary: #64748B;
+            --accent-green: #62A48D;
+            --accent-green-light: #8AB6A4;
+            --accent-green-bg: #E6F3EF;
+            --border-color: #DCE3E8;
+            --shadow-color: rgba(0, 0, 0, 0.05);
+            --input-bg: #FFFFFF;
+            --grid-cell-bg: #E6F3EF;
+            --grid-cell-border: #C8E6C9;
+            --button-bg: #E2E8F0;
+            --button-hover: #CBD5E0;
+        }
+
+        .dark {
+            --bg-primary: #1a1a2e;
+            --bg-secondary: #16213e;
+            --bg-card: #1f2937;
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --accent-green: #6ee7b7;
+            --accent-green-light: #34d399;
+            --accent-green-bg: #064e3b;
+            --border-color: #374151;
+            --shadow-color: rgba(0, 0, 0, 0.3);
+            --input-bg: #374151;
+            --grid-cell-bg: #064e3b;
+            --grid-cell-border: #065f46;
+            --button-bg: #374151;
+            --button-hover: #4b5563;
+        }
+
+        * {
+            transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
         body {
-            font-family: 'Quicksand', sans-serif; /* Soft, rounded font */
-            background: linear-gradient(135deg, #F0F4F8 0%, #E6EEF3 100%); /* Subtle gradient background */
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             margin: 0;
-            padding: 2.5rem; /* Generous padding around the main container */
-            box-sizing: border-box; /* Include padding in element's total width and height */
-            color: #334155; /* Default text color for body */
+            padding: 2.5rem;
+            box-sizing: border-box;
+            color: var(--text-primary);
         }
 
-        /* Main container styling */
         .container {
-            background-color: #FFFFFF; /* Clean white background for the card */
-            padding: 3.5rem; /* Increased padding for more internal whitespace */
-            border-radius: 2rem; /* Even more rounded corners for softness */
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05); /* Softer, larger shadow */
+            background-color: var(--bg-card);
+            padding: 3.5rem;
+            border-radius: 2rem;
+            box-shadow: 0 20px 40px var(--shadow-color);
             width: 100%;
-            max-width: 700px; /* Wider to accommodate the grid labels */
+            max-width: 750px;
             text-align: center;
-            border: 1px solid rgba(220, 220, 220, 0.3); /* Very subtle, almost invisible border */
-            transition: all 0.3s ease-in-out; /* Smooth transitions for any dynamic changes */
+            border: 1px solid var(--border-color);
+            position: relative;
         }
 
-        /* Input fields styling */
+        .dark-mode-toggle {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: var(--button-bg);
+            border: none;
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            box-shadow: 0 2px 8px var(--shadow-color);
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode-toggle:hover {
+            transform: scale(1.1) rotate(15deg);
+            box-shadow: 0 4px 12px var(--shadow-color);
+        }
+
         input[type="date"] {
-            border: 1px solid #DCE3E8; /* Soft border color */
-            padding: 0.95rem 1.4rem; /* More padding for a comfortable feel */
-            border-radius: 1rem; /* More rounded input fields */
+            border: 1px solid var(--border-color);
+            padding: 0.95rem 1.4rem;
+            border-radius: 1rem;
             width: 100%;
             box-sizing: border-box;
-            margin-bottom: 1.5rem; /* Increased spacing below inputs */
-            font-size: 1.15rem; /* Slightly larger font for better readability */
-            color: #4A5568; /* Soft dark gray text */
-            transition: all 0.3s ease-in-out; /* Smooth transitions for focus states */
+            margin-bottom: 1.5rem;
+            font-size: 1.15rem;
+            color: var(--text-primary);
+            background-color: var(--input-bg);
+            transition: all 0.3s ease;
         }
+
         input[type="date"]:focus {
             outline: none;
-            border-color: #8AB6A4; /* Peaceful green for focus border */
-            box-shadow: 0 0 0 4px rgba(138, 182, 164, 0.4); /* Softer, more prominent focus glow */
+            border-color: var(--accent-green);
+            box-shadow: 0 0 0 4px rgba(98, 164, 141, 0.3);
         }
 
-        /* Text color utility classes */
         .text-header {
-            color: #334155; /* Dark slate for main headings */
+            color: var(--text-primary);
         }
+
         .text-primary-display {
-            color: #62A48D; /* A peaceful, inviting green for the main number */
+            color: var(--accent-green);
         }
-        /* Class for vegetarian day highlight */
+
         .text-vegetarian {
-            color: #EF4444; /* Red color for vegetarian day highlight */
+            color: #EF4444;
+            animation: pulse-veg 2s infinite;
         }
+
+        @keyframes pulse-veg {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+
         .text-secondary {
-            color: #64748B; /* Muted gray for supporting information */
+            color: var(--text-secondary);
         }
 
-        /* Message box styling */
         .message-box {
-            padding: 1.2rem; /* More padding for message box */
-            border-radius: 1rem; /* More rounded corners */
-            font-size: 1rem; /* Slightly larger font size */
+            padding: 1.2rem;
+            border-radius: 1rem;
+            font-size: 1rem;
             text-align: left;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03); /* Very subtle shadow */
-            opacity: 0; /* Start hidden for animation */
-            transform: translateY(-20px); /* Start slightly ABOVE for slide-down effect */
-            transition: opacity 0.3s ease-out, transform 0.3s ease-out; /* Smooth transitions */
-            pointer-events: none; /* Initially no interaction */
-
-            /* Global fixed positioning for pop-up effect */
+            box-shadow: 0 4px 15px var(--shadow-color);
+            opacity: 0;
+            transform: translateX(-50%) translateY(-20px);
+            transition: opacity 0.3s ease-out, transform 0.3s ease-out;
+            pointer-events: none;
             position: fixed;
             top: 20px;
             left: 50%;
-            transform: translateX(-50%) translateY(-20px); /* Combine initial transform */
-            z-index: 1000; /* Ensure it's on top */
-            width: calc(100% - 5rem); /* Adjust width to match container, minus padding */
-            max-width: 660px; /* Max width to align with container */
+            z-index: 1000;
+            width: calc(100% - 5rem);
+            max-width: 660px;
         }
-        /* State for showing the message box */
+
         .message-box.show {
             opacity: 1;
-            transform: translateX(-50%) translateY(0); /* Slide to its natural position */
-            pointer-events: auto; /* Enable interaction when shown */
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
         }
-        /* State for hiding the message box */
+
         .message-box.hide {
             opacity: 0;
-            transform: translateX(-50%) translateY(-20px); /* Slide back up when hiding */
-            pointer-events: none; /* Disable interaction when hiding */
+            transform: translateX(-50%) translateY(-20px);
+            pointer-events: none;
         }
 
-        /* Info/Success Message Theme (Green) */
         .message-box.info {
-            background-color: #E6F3EF; /* Very light green background */
-            color: #4CAF50; /* A calm green for info text */
-            border: 1px solid #C8E6C9; /* Subtle border */
-        }
-        /* Error/Warning Message Theme (Orange) */
-        .message-box.error {
-            background-color: #FFF3CD; /* Light orange background */
-            color: #D97706; /* Darker orange text */
-            border: 1px solid #FBBF24; /* Orange border */
+            background-color: var(--accent-green-bg);
+            color: var(--accent-green);
+            border: 1px solid var(--accent-green-light);
         }
 
-        /* "Forget" link styling */
+        .message-box.error {
+            background-color: #FEF2F2;
+            color: #DC2626;
+            border: 1px solid #FECACA;
+        }
+
+        .dark .message-box.error {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #991b1b;
+        }
+
         .reset-link {
             display: inline-block;
-            margin-top: 1.2rem; /* Increased top margin */
-            color: #64748B; /* Soft gray for the link */
+            margin-top: 1.2rem;
+            color: var(--text-secondary);
             text-decoration: underline;
             cursor: pointer;
-            font-size: 0.95rem; /* Slightly larger font */
-            transition: color 0.2s ease-in-out;
-        }
-        .reset-link:hover {
-            color: #334155; /* Darker on hover */
+            font-size: 0.95rem;
+            transition: color 0.2s ease;
         }
 
-        /* Back button styling */
-        .back-button {
-            background-color: #E2E8F0; /* Light gray background */
-            color: #4A5568; /* Soft dark gray text */
-            padding: 0.9rem 1.5rem; /* Good padding */
-            border-radius: 1rem; /* More rounded corners */
-            font-weight: 600; /* Medium bold text */
+        .reset-link:hover {
+            color: var(--accent-green);
+        }
+
+        .back-button, .action-button {
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+            padding: 0.9rem 1.5rem;
+            border-radius: 1rem;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
+            transition: all 0.2s ease;
             width: 100%;
-            margin-top: 1.2rem; /* Increased top top margin */
+            margin-top: 1.2rem;
             border: none;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+            box-shadow: 0 2px 5px var(--shadow-color);
         }
-        .back-button:hover {
-            background-color: #CBD5E0; /* Slightly darker on hover */
-            transform: translateY(-1px); /* Subtle lift */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+
+        .back-button:hover, .action-button:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px var(--shadow-color);
         }
-        .back-button:active {
-            background-color: #94A3B8;
+
+        .back-button:active, .action-button:active {
             transform: translateY(0);
             box-shadow: none;
         }
 
-        /* Grid for round selection */
         .round-grid {
             display: grid;
-            grid-template-columns: auto repeat(9, 1fr); /* Auto for row labels, 9 equal columns for data */
-            gap: 0.3rem; /* Small gap between cells */
+            grid-template-columns: auto repeat(9, 1fr);
+            gap: 0.3rem;
             margin-top: 1.5rem;
-            max-width: 100%; /* Ensure it fits within container */
-            overflow-x: auto; /* Allow horizontal scroll if grid is too wide on small screens */
-            padding-bottom: 0.5rem; /* Space for scrollbar */
-            border: 1px solid #DCE3E8; /* Overall grid border */
-            border-radius: 1rem;
+            max-width: 100%;
+            overflow-x: auto;
             padding: 0.5rem;
-            box-shadow: inset 0 0 5px rgba(0,0,0,0.02); /* Inner subtle shadow */
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            box-shadow: inset 0 0 5px var(--shadow-color);
+            background-color: var(--bg-card);
         }
+
         .grid-label {
-            background-color: #F8FAFC; /* Very light background for labels */
-            color: #64748B; /* Muted gray for label text */
-            padding: 0.5rem 0.2rem; /* Padding for labels */
-            font-size: 0.85rem; /* Smaller font for labels */
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            padding: 0.5rem 0.2rem;
+            font-size: 0.85rem;
             font-weight: 500;
             display: flex;
             justify-content: center;
             align-items: center;
-            border-radius: 0.3rem; /* Slightly rounded corners for labels */
-            text-transform: uppercase; /* Uppercase for day labels */
+            border-radius: 0.3rem;
+            text-transform: uppercase;
         }
+
         .grid-label.corner {
-            background-color: transparent; /* Top-left corner is transparent */
+            background-color: transparent;
             border: none;
         }
+
         .round-grid-cell {
-            background-color: #E6F3EF; /* Light green background for cells */
-            color: #4A5568; /* Dark gray text */
-            padding: 0.75rem 0.5rem; /* Padding within cells */
-            border-radius: 0.5rem; /* Rounded corners for cells */
+            background-color: var(--grid-cell-bg);
+            color: var(--text-primary);
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.5rem;
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            border: 1px solid #C8E6C9; /* Subtle border */
+            transition: all 0.2s ease;
+            border: 1px solid var(--grid-cell-border);
             display: flex;
             justify-content: center;
             align-items: center;
-            aspect-ratio: 1 / 1; /* Keep cells square */
-            min-width: 45px; /* Minimum width for cells */
+            aspect-ratio: 1 / 1;
+            min-width: 45px;
         }
+
         .round-grid-cell:hover {
-            background-color: #D1E8E0; /* Slightly darker green on hover */
-            color: #334155;
-            transform: translateY(-2px); /* Subtle lift */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            background-color: var(--accent-green);
+            color: white;
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 4px 12px var(--shadow-color);
         }
+
         .round-grid-cell:active {
-            background-color: #A9D1C2;
-            transform: translateY(0);
+            transform: translateY(0) scale(1);
             box-shadow: none;
         }
 
-        /* Responsive adjustments */
+        .calendar-preview {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--accent-green-bg) 0%, var(--bg-card) 100%);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .calendar-preview h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .calendar-days {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+        }
+
+        .calendar-day {
+            padding: 0.75rem 0.5rem;
+            border-radius: 0.75rem;
+            text-align: center;
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .calendar-day.today {
+            background-color: var(--accent-green);
+            color: white;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(98, 164, 141, 0.4);
+        }
+
+        .calendar-day.veg-day {
+            background-color: #FEE2E2;
+            border-color: #FECACA;
+        }
+
+        .dark .calendar-day.veg-day {
+            background-color: #7f1d1d;
+            border-color: #991b1b;
+        }
+
+        .calendar-day .day-name {
+            font-size: 0.7rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.25rem;
+        }
+
+        .calendar-day .day-date {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .calendar-day .day-round {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--accent-green);
+            margin-top: 0.25rem;
+        }
+
+        .calendar-day.today .day-name,
+        .calendar-day.today .day-date,
+        .calendar-day.today .day-round {
+            color: white;
+        }
+
+        .history-section {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background-color: var(--bg-primary);
+            border-radius: 1.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .history-section h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 0.5rem;
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 1rem;
+            background-color: var(--bg-card);
+            border-radius: 0.75rem;
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+
+        .history-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .history-date {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .history-round {
+            font-weight: 600;
+            color: var(--accent-green);
+        }
+
+        .backup-section {
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .backup-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.75rem 1rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            border: none;
+            font-size: 0.9rem;
+            transition: all 0.2s ease;
+        }
+
+        .backup-btn.export {
+            background-color: var(--accent-green);
+            color: white;
+        }
+
+        .backup-btn.export:hover {
+            background-color: var(--accent-green-light);
+            transform: translateY(-2px);
+        }
+
+        .backup-btn.import {
+            background-color: var(--button-bg);
+            color: var(--text-primary);
+        }
+
+        .backup-btn.import:hover {
+            background-color: var(--button-hover);
+            transform: translateY(-2px);
+        }
+
+        .view-fade-enter {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .view-fade-active {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            accent-color: var(--accent-green);
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        #currentRoundDisplay {
+            padding-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .section-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--border-color), transparent);
+            margin: 2rem 0;
+        }
+
         @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
             .container {
-                padding: 1.5rem; /* Reduce padding on smaller screens */
+                padding: 1.5rem;
                 border-radius: 1.25rem;
-                max-width: 95%; /* Allow it to take more width on smaller screens */
+                max-width: 100%;
             }
+
+            .dark-mode-toggle {
+                top: 1rem;
+                right: 1rem;
+                width: 40px;
+                height: 40px;
+            }
+
             h1 {
-                font-size: 2.2rem; /* Adjust heading size */
+                font-size: 1.5rem !important;
+                padding-top: 2rem;
             }
-            h2 {
-                font-size: 1.5rem;
-            }
+
             input[type="date"] {
                 font-size: 0.95rem;
                 padding: 0.65rem 1rem;
-                margin-bottom: 0.8rem;
             }
-            .text-7xl { /* Adjust main round number size */
-                font-size: 4rem;
-            }
-            .text-lg {
-                font-size: 1rem;
-            }
+
             .round-grid {
-                /* Adjust grid columns to be more flexible on small screens */
-                grid-template-columns: auto repeat(9, minmax(28px, 1fr)); /* Smaller min-width for cells */
-                gap: 0.15rem; /* Smaller gap */
+                grid-template-columns: auto repeat(9, minmax(28px, 1fr));
+                gap: 0.15rem;
                 padding: 0.2rem;
             }
+
             .round-grid-cell {
-                font-size: 0.75rem; /* Smaller font for cells */
+                font-size: 0.75rem;
                 padding: 0.3rem;
-                min-width: 28px; /* Adjusted min-width */
+                min-width: 28px;
             }
+
             .grid-label {
-                font-size: 0.6rem; /* Smaller font for labels */
+                font-size: 0.6rem;
                 padding: 0.2rem 0.05rem;
             }
-            .back-button {
-                padding: 0.7rem 1rem;
-                font-size: 0.9rem;
+
+            .calendar-days {
+                grid-template-columns: repeat(7, 1fr);
+                gap: 0.25rem;
             }
+
+            .calendar-day {
+                padding: 0.5rem 0.25rem;
+            }
+
+            .calendar-day .day-name {
+                font-size: 0.6rem;
+            }
+
+            .calendar-day .day-date {
+                font-size: 0.7rem;
+            }
+
+            .calendar-day .day-round {
+                font-size: 0.75rem;
+            }
+
+            .backup-section {
+                flex-direction: column;
+            }
+
+            .backup-btn {
+                width: 100%;
+            }
+
             .message-box {
-                width: calc(100% - 3rem); /* Adjust width for mobile padding */
+                width: calc(100% - 2rem);
             }
-        }
-        #currentRoundDisplay{
-            padding-bottom: 20px;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1 class="text-2xl font-bold text-header mb-10">ကိုးနဝင်း မိုးလင်းမှသိမယ်</h1>
+        <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle Dark Mode">
+            <span id="darkModeIcon">🌙</span>
+        </button>
+        
+        <h1 class="text-2xl font-bold text-header mb-8">ကိုးနဝင်း မိုးလင်းမှသိမယ်</h1>
 
         <div id="mainContent" class="mb-8">
             <label for="startDate" class="block text-header text-lg font-semibold mb-3">Set Your Starting Day:</label>
@@ -275,34 +590,56 @@
         </div>
 
         <div id="roundSelectionContent" class="hidden">
-            <h2 class="text-1xl font-semibold text-header mb-6">ဒီနေ့ ဘယ််အဆင့် ဘယ်နှပတ်လဲ</h2>
+            <h2 class="text-1xl font-semibold text-header mb-6">ဒီနေ့ ဘယ််အဆင့် ဘယ်နှပတ်လဲ</h2>
             <p class="text-lg text-secondary mb-5">Please click on the cell that represents your current round today:</p>
             
-            <div id="todayRoundGrid" class="round-grid">
-                </div>
+            <div id="todayRoundGrid" class="round-grid"></div>
             
             <button id="backToMainBtn" class="back-button">Back to Main</button>
         </div>
 
         <div class="mb-8">
-            <h2 class="text-3xl font-semibold text-header mb-6">Current :</h2>
+            <h2 class="text-3xl font-semibold text-header mb-6">Current:</h2>
             <p id="currentRoundDisplay" class="text-4xl font-extrabold text-primary-display mb-4 leading-none">--</p>
             <p id="startDateDisplay" class="text-secondary text-base">Start Date: Not set</p>
             <p id="daysPassedDisplay" class="text-secondary text-base">Days Passed: --</p>
         </div>
 
-        <div class="mt-6 mb-4 flex justify-center">
-            <label class="inline-flex items-center text-secondary cursor-pointer">
-                <input type="checkbox" id="vegAlertsCheckbox" class="form-checkbox h-5 w-5 text-green-600 rounded-md focus:ring-green-500">
-                <span class="ml-2 text-base font-medium">Enable Vegetarian Day Alerts</span>
-            </label>
+        <div class="checkbox-container">
+            <input type="checkbox" id="vegAlertsCheckbox">
+            <label for="vegAlertsCheckbox">Enable Vegetarian Day Alerts</label>
         </div>
 
+        <div class="section-divider"></div>
+
+        <div id="calendarPreview" class="calendar-preview">
+            <h3>Upcoming 7 Days</h3>
+            <div id="calendarDays" class="calendar-days"></div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div id="historySection" class="history-section">
+            <h3>Recent History</h3>
+            <div id="historyList" class="history-list"></div>
+        </div>
+
+        <div class="section-divider"></div>
+
+        <div class="backup-section">
+            <button id="exportBtn" class="backup-btn export">Export Data</button>
+            <button id="importBtn" class="backup-btn import">Import Data</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
     </div>
+    
     <div id="messageBox" class="message-box hidden"></div>
 
+    <audio id="notificationSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2teleAsgnPDpvmMIH5nh3rF+DAaQ1+OvfhEBhc/prYAVA4LQ67+UFxGC0eyxhRsUg9DxsoQYEoHR9bWIGxOF1fy4hxkRhs75uYYYD4TL+beIGRGFzPq4hhoTh876uIcZEYfN+reGGBCFzPq4hxoThs35uIcZEYfN+reGGRGGzPq4hxkRhs36t4cZEobM+reHGRGGzPq3hhkRhsz6t4cZEYbM+reHGRGGzPq4hxkRhsz6t4YZEYbM+reHGRGGzPq3hhkRhsz6t4cZEYbM+reGGRGGzPq3hxkRhsz6t4YZEYbM+riHGRGGzPq3hhkRhsz6t4YZEYbM+reGGRGGzPq3hxkRhsz6uIcZEYbM+reGGQ==" type="audio/wav">
+    </audio>
+
     <script>
-        // Define the 9x9 grid for rounds.
         const roundGrid = [
             [2, 9, 4, 7, 5, 3, 6, 1, 8],
             [3, 1, 5, 8, 6, 4, 7, 2, 9],
@@ -315,14 +652,13 @@
             [1, 8, 3, 6, 4, 2, 5, 9, 7]
         ];
 
-        // Days of the week for column labels (repeating)
         const daysOfWeekLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun', 'Mon', 'Tue'];
-        const fullDaysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const fullDaysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const fullDaysOfWeekLong = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
-        const VEGETARIAN_COL_INDEX = 4; // 0-indexed, which is the 5th column
+        const VEGETARIAN_COL_INDEX = 4;
 
-        // Map for Burmese round names
         const numberToTextMap = {
             1: "အရဟံ",
             2: "သမ္ပာသမ္ဗုဒ္ဓေါ",
@@ -335,22 +671,13 @@
             9: "ဘဂဝါ"
         };
         
-        // Map for Myanmar numerals
         const numberToTextinMM = {
-            1: "၁",
-            2: "၂",
-            3: "၃",
-            4: "၄",
-            5: "၅",
-            6: "၆",
-            7: "၇",
-            8: "၈",
-            9: "၉"
+            1: "၁", 2: "၂", 3: "၃", 4: "၄", 5: "၅",
+            6: "၆", 7: "၇", 8: "၈", 9: "၉"
         };
 
-        // Helper function to get ordinal suffix (e.g., 1st, 2nd, 3rd, 4th)
         function getOrdinalSuffix(day) {
-            if (day > 3 && day < 21) return 'th'; // Handles 11th, 12th, 13th
+            if (day > 3 && day < 21) return 'th';
             switch (day % 10) {
                 case 1: return 'st';
                 case 2: return 'nd';
@@ -359,59 +686,181 @@
             }
         }
 
-        // Get DOM elements
         const startDateInput = document.getElementById('startDate');
         const currentRoundDisplay = document.getElementById('currentRoundDisplay');
         const startDateDisplay = document.getElementById('startDateDisplay');
         const daysPassedDisplay = document.getElementById('daysPassedDisplay');
-        const messageBox = document.getElementById('messageBox'); // This is now a global element
+        const messageBox = document.getElementById('messageBox');
         const forgetLink = document.getElementById('forgetLink');
         const mainContent = document.getElementById('mainContent');
         const roundSelectionContent = document.getElementById('roundSelectionContent');
         const todayRoundGrid = document.getElementById('todayRoundGrid');
         const backToMainBtn = document.getElementById('backToMainBtn');
-        const vegAlertsCheckbox = document.getElementById('vegAlertsCheckbox'); 
+        const vegAlertsCheckbox = document.getElementById('vegAlertsCheckbox');
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const darkModeIcon = document.getElementById('darkModeIcon');
+        const calendarDays = document.getElementById('calendarDays');
+        const historyList = document.getElementById('historyList');
+        const exportBtn = document.getElementById('exportBtn');
+        const importBtn = document.getElementById('importBtn');
+        const importFile = document.getElementById('importFile');
+        const notificationSound = document.getElementById('notificationSound');
 
-        // Function to show messages with animation
+        function initDarkMode() {
+            const savedMode = localStorage.getItem('darkMode');
+            if (savedMode === 'true' || (!savedMode && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                darkModeIcon.textContent = '☀️';
+            }
+        }
+
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+            const isDark = document.documentElement.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark);
+            darkModeIcon.textContent = isDark ? '☀️' : '🌙';
+        }
+
+        darkModeToggle.addEventListener('click', toggleDarkMode);
+
         function showMessage(message, type = 'info') {
             messageBox.textContent = message;
-            // Remove all type classes first
-            messageBox.classList.remove('error', 'info'); 
-            // Add the new type class
-            messageBox.classList.add(type);
+            messageBox.classList.remove('error', 'info', 'show', 'hide');
+            messageBox.classList.add(type, 'hidden');
             
-            // Ensure it's hidden (display: none) before starting animation
-            // This is crucial to reset the transition
-            messageBox.classList.add('hidden'); 
-            // Remove 'show' state if it was there
-            messageBox.classList.remove('show');
-            // Set initial animation state (opacity 0, transform -20px)
-            messageBox.classList.add('hide');
-
-
-            // Force reflow to apply the initial 'hide' state immediately
-            // before changing to 'show' state. This makes the transition work.
-            void messageBox.offsetWidth; 
-
-            // Remove 'hidden' to make it displayable (e.g., display: block)
+            void messageBox.offsetWidth;
+            
             messageBox.classList.remove('hidden');
-            // Add 'show' class to trigger fade-in/slide-down animation
-            messageBox.classList.remove('hide');
             messageBox.classList.add('show');
             
-            // Hide message after 3 seconds
             setTimeout(() => {
                 messageBox.classList.remove('show');
                 messageBox.classList.add('hide');
-                // Fully hide after animation completes
-                messageBox.addEventListener('transitionend', function handler() {
-                    messageBox.classList.add('hidden');
-                    messageBox.removeEventListener('transitionend', handler);
-                }, { once: true }); // Use { once: true } to ensure listener is removed after one use
-            }, 80000); // Changed timeout to 3 seconds
+                setTimeout(() => messageBox.classList.add('hidden'), 300);
+            }, 4000);
         }
 
-        // Function to calculate the round
+        function playNotificationSound() {
+            if (notificationSound) {
+                notificationSound.currentTime = 0;
+                notificationSound.play().catch(() => {});
+            }
+        }
+
+        function getRoundForDate(startDate, targetDate) {
+            const start = new Date(startDate);
+            start.setHours(0, 0, 0, 0);
+            const target = new Date(targetDate);
+            target.setHours(0, 0, 0, 0);
+            
+            const timeDiff = target.getTime() - start.getTime();
+            const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+            
+            if (daysPassed < 0) return null;
+            
+            const numRows = roundGrid.length;
+            const numCols = roundGrid[0].length;
+            const totalCells = numRows * numCols;
+            
+            const gridIndex = daysPassed % totalCells;
+            const rowIndex = Math.floor(gridIndex / numCols);
+            const colIndex = gridIndex % numCols;
+            
+            return {
+                number: roundGrid[rowIndex][colIndex],
+                colIndex: colIndex,
+                isVegDay: colIndex === VEGETARIAN_COL_INDEX
+            };
+        }
+
+        function updateCalendarPreview() {
+            const storedStartDate = localStorage.getItem('startDate');
+            calendarDays.innerHTML = '';
+            
+            if (!storedStartDate) {
+                calendarDays.innerHTML = '<p class="text-secondary text-sm" style="grid-column: 1 / -1;">Set a start date to see upcoming rounds</p>';
+                return;
+            }
+            
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(today);
+                date.setDate(today.getDate() + i);
+                
+                const roundInfo = getRoundForDate(storedStartDate, date);
+                if (!roundInfo) continue;
+                
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                if (i === 0) dayDiv.classList.add('today');
+                if (roundInfo.isVegDay) dayDiv.classList.add('veg-day');
+                
+                const dayName = document.createElement('div');
+                dayName.className = 'day-name';
+                dayName.textContent = fullDaysOfWeek[date.getDay()];
+                
+                const dayDate = document.createElement('div');
+                dayDate.className = 'day-date';
+                dayDate.textContent = `${date.getDate()}/${date.getMonth() + 1}`;
+                
+                const dayRound = document.createElement('div');
+                dayRound.className = 'day-round';
+                dayRound.textContent = numberToTextinMM[roundInfo.number];
+                
+                dayDiv.appendChild(dayName);
+                dayDiv.appendChild(dayDate);
+                dayDiv.appendChild(dayRound);
+                calendarDays.appendChild(dayDiv);
+            }
+        }
+
+        function addToHistory(date, roundNumber, roundText) {
+            let history = JSON.parse(localStorage.getItem('roundHistory') || '[]');
+            const dateStr = date.toISOString().split('T')[0];
+            
+            const exists = history.find(h => h.date === dateStr);
+            if (!exists) {
+                history.unshift({
+                    date: dateStr,
+                    roundNumber: roundNumber,
+                    roundText: roundText,
+                    timestamp: Date.now()
+                });
+                history = history.slice(0, 30);
+                localStorage.setItem('roundHistory', JSON.stringify(history));
+            }
+        }
+
+        function updateHistoryDisplay() {
+            const history = JSON.parse(localStorage.getItem('roundHistory') || '[]');
+            historyList.innerHTML = '';
+            
+            if (history.length === 0) {
+                historyList.innerHTML = '<p class="text-secondary text-sm text-center">No history yet</p>';
+                return;
+            }
+            
+            history.slice(0, 10).forEach(item => {
+                const itemDiv = document.createElement('div');
+                itemDiv.className = 'history-item';
+                
+                const dateSpan = document.createElement('span');
+                dateSpan.className = 'history-date';
+                const date = new Date(item.date);
+                dateSpan.textContent = `${fullDaysOfWeek[date.getDay()]}, ${date.getDate()}/${date.getMonth() + 1}`;
+                
+                const roundSpan = document.createElement('span');
+                roundSpan.className = 'history-round';
+                roundSpan.textContent = `${item.roundText} ${numberToTextinMM[item.roundNumber]}`;
+                
+                itemDiv.appendChild(dateSpan);
+                itemDiv.appendChild(roundSpan);
+                historyList.appendChild(itemDiv);
+            });
+        }
+
         function calculateRound() {
             const storedStartDate = localStorage.getItem('startDate');
 
@@ -419,24 +868,20 @@
                 currentRoundDisplay.textContent = '--';
                 startDateDisplay.textContent = 'Start Date: Not set';
                 daysPassedDisplay.textContent = 'Days Passed: --';
-                // Only show initial message if no date is set and not in round selection mode
-                // Also, show message in the appropriate messageBox location
                 if (!startDateInput.value && roundSelectionContent.classList.contains('hidden')) {
-                    // If in main view and no date, show message
-                     showMessage('Please select your starting day, or click "Forget your started day?" to set today\'s round.', 'info');
-                } else if (!startDateInput.value && !roundSelectionContent.classList.contains('hidden')) {
-                    // If in round selection view and no date, show message there
-                    showMessage('Please click on the cell that represents your current round today. The calculated start date must be a Monday.', 'info');
+                    showMessage('Please select your starting day to begin tracking.', 'info');
                 }
-                currentRoundDisplay.classList.remove('text-vegetarian'); // Clear any previous highlights
+                currentRoundDisplay.classList.remove('text-vegetarian');
+                updateCalendarPreview();
+                updateHistoryDisplay();
                 return;
             }
 
             const startDate = new Date(storedStartDate);
-            startDate.setHours(0, 0, 0, 0); 
+            startDate.setHours(0, 0, 0, 0);
 
             const today = new Date();
-            today.setHours(0, 0, 0, 0); 
+            today.setHours(0, 0, 0, 0);
 
             const timeDifference = today.getTime() - startDate.getTime();
             const daysPassed = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
@@ -459,59 +904,56 @@
             const colIndex = gridIndex % numCols;
 
             const currentRoundNumber = roundGrid[rowIndex][colIndex];
-            // Get Burmese text name
-            const currentRoundText = numberToTextMap[currentRoundNumber] || ''; 
-            // Get Myanmar numeral
-            const currentRoundMyanmarNumeral = numberToTextinMM[currentRoundNumber] || currentRoundNumber; // Fallback to Arabic if not found
+            const currentRoundText = numberToTextMap[currentRoundNumber] || '';
+            const currentRoundMyanmarNumeral = numberToTextinMM[currentRoundNumber] || currentRoundNumber;
 
-            // Display Myanmar numeral and Burmese text
-            currentRoundDisplay.textContent = `${currentRoundText} ${currentRoundMyanmarNumeral} ပတ်`; 
+            currentRoundDisplay.textContent = `${currentRoundText} ${currentRoundMyanmarNumeral} ပတ်`;
             startDateDisplay.textContent = `Start Date: ${new Date(storedStartDate).toLocaleDateString('en-GB')}`;
             daysPassedDisplay.textContent = `Days Passed: ${daysPassed}`;
 
-            // --- Vegetarian Day Logic ---
-            const vegAlertsEnabled = vegAlertsCheckbox.checked; 
+            addToHistory(today, currentRoundNumber, currentRoundText);
 
-            currentRoundDisplay.classList.remove('text-vegetarian'); 
+            const vegAlertsEnabled = vegAlertsCheckbox.checked;
+            currentRoundDisplay.classList.remove('text-vegetarian');
 
             if (vegAlertsEnabled) {
                 if (colIndex === VEGETARIAN_COL_INDEX) {
-                    currentRoundDisplay.classList.add('text-vegetarian'); 
-                    showMessage("Today is Vegetarian Day! 🥦", 'info'); 
+                    currentRoundDisplay.classList.add('text-vegetarian');
+                    showMessage("Today is Vegetarian Day!", 'info');
+                    playNotificationSound();
                 } else {
                     let daysUntilNextVegDay;
                     if (colIndex < VEGETARIAN_COL_INDEX) {
                         daysUntilNextVegDay = VEGETARIAN_COL_INDEX - colIndex;
-                    } else { 
+                    } else {
                         daysUntilNextVegDay = (numCols - colIndex) + VEGETARIAN_COL_INDEX;
                     }
                     
-                    // Calculate the exact date for the next Vegetarian Day
                     const nextVegDate = new Date(today);
                     nextVegDate.setDate(today.getDate() + daysUntilNextVegDay);
 
-                    const dayOfWeek = fullDaysOfWeek[nextVegDate.getDay()]; // getDay() returns 0 for Sunday
+                    const dayOfWeek = fullDaysOfWeekLong[nextVegDate.getDay()];
                     const monthName = months[nextVegDate.getMonth()];
                     const dayOfMonth = nextVegDate.getDate();
                     const ordinalSuffix = getOrdinalSuffix(dayOfMonth);
 
-                    showMessage(`Vegetarian Day on ${dayOfWeek}, ${monthName} ${dayOfMonth}${ordinalSuffix}! 🥦`, 'info'); 
+                    showMessage(`Next Vegetarian Day: ${dayOfWeek}, ${monthName} ${dayOfMonth}${ordinalSuffix}`, 'info');
                 }
             }
+
+            updateCalendarPreview();
+            updateHistoryDisplay();
         }
 
-        // Populate the 9x9 grid with clickable cells and labels
         function populateRoundGridButtons() {
-            todayRoundGrid.innerHTML = ''; 
+            todayRoundGrid.innerHTML = '';
             const numRows = roundGrid.length;
             const numCols = roundGrid[0].length;
 
-            // Add top-left empty corner
             const cornerDiv = document.createElement('div');
             cornerDiv.classList.add('grid-label', 'corner');
             todayRoundGrid.appendChild(cornerDiv);
 
-            // Add column headers (Days of the Week)
             daysOfWeekLabels.forEach(day => {
                 const dayLabel = document.createElement('div');
                 dayLabel.classList.add('grid-label');
@@ -519,116 +961,101 @@
                 todayRoundGrid.appendChild(dayLabel);
             });
 
-            // Add rows with labels and cells
             for (let r = 0; r < numRows; r++) {
-                // Add row label
                 const rowLabel = document.createElement('div');
                 rowLabel.classList.add('grid-label');
-                rowLabel.textContent = `Row ${r + 1}`; 
+                rowLabel.textContent = `${r + 1}`;
                 todayRoundGrid.appendChild(rowLabel);
 
-                // Add cells for the current row
                 for (let c = 0; c < numCols; c++) {
                     const cellButton = document.createElement('button');
                     cellButton.classList.add('round-grid-cell');
                     const roundNumber = roundGrid[r][c];
-                    const roundText = numberToTextMap[roundNumber] || ''; // Fallback to empty string
-                    const roundMyanmarNumeral = numberToTextinMM[roundNumber] || roundNumber; // Fallback to Arabic
+                    const roundMyanmarNumeral = numberToTextinMM[roundNumber] || roundNumber;
 
-                    cellButton.textContent = `${roundMyanmarNumeral}`; // Display Myanmar numeral and Burmese text
-                    // cellButton.textContent = `${roundMyanmarNumeral} ${roundText}`; // Display Myanmar numeral and Burmese text
-
-                    cellButton.dataset.row = r; 
-                    cellButton.dataset.col = c; 
+                    cellButton.textContent = roundMyanmarNumeral;
+                    cellButton.dataset.row = r;
+                    cellButton.dataset.col = c;
                     todayRoundGrid.appendChild(cellButton);
                 }
             }
         }
 
-        // Event listener for changes in the start date input
         startDateInput.addEventListener('change', () => {
             const selectedDateString = startDateInput.value;
             if (selectedDateString) {
                 const selectedDate = new Date(selectedDateString);
-                // getDay() returns 0 for Sunday, 1 for Monday, ..., 6 for Saturday
-                if (selectedDate.getDay() !== 1) { // Check if it's not Monday
-                    showMessage('The start day must be a Monday of the week. Please select a Monday.', 'error');
-                    startDateInput.value = ''; // Clear the invalid input
-                    localStorage.removeItem('startDate'); // Ensure no invalid date is saved
-                    calculateRound(); // Update display to "Not set"
-                    return; // Stop further processing
+                if (selectedDate.getDay() !== 1) {
+                    showMessage('The start day must be a Monday. Please select a Monday.', 'error');
+                    startDateInput.value = '';
+                    localStorage.removeItem('startDate');
+                    calculateRound();
+                    return;
                 }
 
                 localStorage.setItem('startDate', selectedDateString);
-                showMessage('Start date saved automatically!', 'info');
+                showMessage('Start date saved!', 'info');
                 calculateRound();
             } else {
                 localStorage.removeItem('startDate');
-                showMessage('Start date cleared. Please select a new date.', 'error');
+                showMessage('Start date cleared.', 'error');
                 calculateRound();
             }
         });
 
-        // Event listener for "Forget your started day?" link
         forgetLink.addEventListener('click', () => {
-            localStorage.removeItem('startDate'); 
-            startDateInput.value = ''; 
-            calculateRound(); 
+            localStorage.removeItem('startDate');
+            startDateInput.value = '';
+            calculateRound();
             
             mainContent.classList.add('hidden');
             roundSelectionContent.classList.remove('hidden');
-            showMessage('Please click on the cell that represents your current round today. The calculated start date must be a Monday.', 'info');
-            populateRoundGridButtons(); 
+            showMessage('Select the cell representing your current round. Start date must be a Monday.', 'info');
+            populateRoundGridButtons();
         });
 
-        // Event listener for clicks on the 9x9 round grid
         todayRoundGrid.addEventListener('click', (event) => {
             const target = event.target;
             if (target.classList.contains('round-grid-cell')) {
-                const selectedRow = parseInt(target.dataset.row); 
-                const selectedCol = parseInt(target.dataset.col); 
+                const selectedRow = parseInt(target.dataset.row);
+                const selectedCol = parseInt(target.dataset.col);
 
                 const numCols = roundGrid[0].length;
-                const daysPassedForToday = selectedRow * numCols + selectedCol - 1; 
+                const daysPassedForToday = selectedRow * numCols + selectedCol;
                 
                 const today = new Date();
-                today.setHours(0, 0, 0, 0); 
+                today.setHours(0, 0, 0, 0);
 
-                const newStartDate = new Date(today); 
-                newStartDate.setDate(today.getDate() - daysPassedForToday); 
+                const newStartDate = new Date(today);
+                newStartDate.setDate(today.getDate() - daysPassedForToday);
 
-                // Validate if the calculated newStartDate is a Monday
-                if (newStartDate.getDay() - 1 !== 1) { // 1 for Monday
-                    showMessage('The selected cell would result in a start day that is not a Monday. Please choose a different cell.', 'error');
-                    // Do not save or transition back to main content
-                    return; 
+                if (newStartDate.getDay() !== 1) {
+                    showMessage('Selected cell results in a non-Monday start. Choose different cell.', 'error');
+                    return;
                 }
 
                 const newStartDateFormatted = newStartDate.toISOString().split('T')[0];
 
                 localStorage.setItem('startDate', newStartDateFormatted);
-                startDateInput.value = newStartDateFormatted; 
+                startDateInput.value = newStartDateFormatted;
                 
                 roundSelectionContent.classList.add('hidden');
                 mainContent.classList.remove('hidden');
                 
-                showMessage('Start date updated based on your chosen round!', 'info');
-                calculateRound(); 
+                showMessage('Start date updated!', 'info');
+                calculateRound();
             }
         });
 
-        // Event listener for "Back" button
         backToMainBtn.addEventListener('click', () => {
             roundSelectionContent.classList.add('hidden');
             mainContent.classList.remove('hidden');
-            calculateRound(); 
-            showMessage('Returned to main view.', 'info');
+            calculateRound();
         });
 
-        // Load/Save Vegetarian Alerts Preference
         function loadVegAlertsPreference() {
             const enabled = localStorage.getItem('vegAlertsEnabled');
-            if (enabled !== null) { 
+            if (enabled !== null) {
                 vegAlertsCheckbox.checked = (enabled === 'true');
             } else {
                 vegAlertsCheckbox.checked = true;
@@ -638,15 +1065,59 @@
 
         function saveVegAlertsPreference() {
             localStorage.setItem('vegAlertsEnabled', vegAlertsCheckbox.checked);
-            calculateRound(); 
+            calculateRound();
         }
 
-        // Event listener for checkbox change
         vegAlertsCheckbox.addEventListener('change', saveVegAlertsPreference);
 
-        // Initialize on page load
+        function exportData() {
+            const data = {
+                startDate: localStorage.getItem('startDate'),
+                vegAlertsEnabled: localStorage.getItem('vegAlertsEnabled'),
+                darkMode: localStorage.getItem('darkMode'),
+                roundHistory: JSON.parse(localStorage.getItem('roundHistory') || '[]'),
+                exportDate: new Date().toISOString()
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `koenawain-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showMessage('Data exported successfully!', 'info');
+        }
+
+        function importData(file) {
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = JSON.parse(e.target.result);
+                    
+                    if (data.startDate) localStorage.setItem('startDate', data.startDate);
+                    if (data.vegAlertsEnabled) localStorage.setItem('vegAlertsEnabled', data.vegAlertsEnabled);
+                    if (data.darkMode) localStorage.setItem('darkMode', data.darkMode);
+                    if (data.roundHistory) localStorage.setItem('roundHistory', JSON.stringify(data.roundHistory));
+                    
+                    location.reload();
+                } catch (err) {
+                    showMessage('Invalid backup file.', 'error');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        exportBtn.addEventListener('click', exportData);
+        importBtn.addEventListener('click', () => importFile.click());
+        importFile.addEventListener('change', (e) => {
+            if (e.target.files[0]) importData(e.target.files[0]);
+        });
+
+        initDarkMode();
+
         window.onload = () => {
-            loadVegAlertsPreference(); 
+            loadVegAlertsPreference();
             const storedStartDate = localStorage.getItem('startDate');
             if (storedStartDate) {
                 startDateInput.value = storedStartDate;
@@ -656,14 +1127,11 @@
                 mainContent.classList.remove('hidden');
                 roundSelectionContent.classList.add('hidden');
             }
-            calculateRound(); 
+            calculateRound();
         };
     </script>
 
     <script>
-        // ... Your existing JavaScript code ...
-
-        // Register the Service Worker
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/sw.js')
@@ -676,6 +1144,5 @@
             });
         }
     </script>
-    
 </body>
 </html>
