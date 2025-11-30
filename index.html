@@ -583,10 +583,18 @@
         <h1 class="text-2xl font-bold text-header mb-8">ကိုးနဝင်း မိုးလင်းမှသိမယ်</h1>
 
         <div id="mainContent" class="mb-8">
-            <label for="startDate" class="block text-header text-lg font-semibold mb-3">Set Your Starting Day:</label>
+            <label for="startDate" class="block text-header text-lg font-semibold mb-3">Set Your Starting Monday:</label>
             <input type="date" id="startDate" class="shadow-sm">
-            <p class="text-base text-secondary mt-1">Select a date, and it will be saved automatically for your next visit.</p>
-            <span id="forgetLink" class="reset-link">Forget your started day?</span>
+            <p class="text-base text-secondary mt-1">Select a <strong>Monday</strong> as your starting day.</p>
+            
+            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+                <p class="text-secondary text-sm mb-3">Or set your current round directly:</p>
+                <button id="setTodayRoundBtn" class="action-button" style="background-color: var(--accent-green); color: white;">
+                    Set Today's Round
+                </button>
+            </div>
+            
+            <span id="forgetLink" class="reset-link" style="display: none;">Reset start date</span>
         </div>
 
         <div id="roundSelectionContent" class="hidden">
@@ -692,6 +700,7 @@
         const daysPassedDisplay = document.getElementById('daysPassedDisplay');
         const messageBox = document.getElementById('messageBox');
         const forgetLink = document.getElementById('forgetLink');
+        const setTodayRoundBtn = document.getElementById('setTodayRoundBtn');
         const mainContent = document.getElementById('mainContent');
         const roundSelectionContent = document.getElementById('roundSelectionContent');
         const todayRoundGrid = document.getElementById('todayRoundGrid');
@@ -1010,7 +1019,14 @@
             
             mainContent.classList.add('hidden');
             roundSelectionContent.classList.remove('hidden');
-            showMessage('Select the cell representing your current round. Start date must be a Monday.', 'info');
+            showMessage('Select the cell representing your current round.', 'info');
+            populateRoundGridButtons();
+        });
+
+        setTodayRoundBtn.addEventListener('click', () => {
+            mainContent.classList.add('hidden');
+            roundSelectionContent.classList.remove('hidden');
+            showMessage('Click on the cell that matches your round for today.', 'info');
             populateRoundGridButtons();
         });
 
