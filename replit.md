@@ -9,7 +9,7 @@ This is a Progressive Web App (PWA) for tracking daily rounds based on a 9x9 gri
 - Vegetarian day alerts with audio notification
 - 7-day calendar preview
 - History tracking
-- Backup/restore functionality
+- Backup/restore functionality (JSON export/import + QR code generation/scanning)
 - Responsive design
 
 ## Project Architecture
@@ -27,6 +27,13 @@ This is a Progressive Web App (PWA) for tracking daily rounds based on a 9x9 gri
 - `README.md` - Basic project documentation
 
 ## Recent Changes
+- 2025-11-30: QR code backup/restore
+  - Added QR code generation using qrcode.js library (CDN)
+  - Added QR code scanning using html5-qrcode library (CDN)
+  - Show QR Code button generates scannable QR with all user data
+  - Scan QR Code button uses camera to import data from another device
+  - Fixed timezone bug in date parsing for Monday validation
+
 - 2025-11-30: Major visual and functional enhancements
   - Added dark mode toggle with localStorage persistence
   - Created PWA icons and updated manifest
@@ -48,6 +55,8 @@ This is a Progressive Web App (PWA) for tracking daily rounds based on a 9x9 gri
 - Service worker uses network-first strategy with cache fallback
 - Uses Tailwind CSS via CDN
 - Google Fonts (Quicksand) loaded via CDN
+- QR code generation: qrcode.js (jsdelivr CDN)
+- QR code scanning: html5-qrcode (unpkg CDN)
 - No build process required - pure static HTML
 - Deployment: Autoscale deployment using Python HTTP server on port 5000
 
