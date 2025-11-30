@@ -12,7 +12,7 @@
     <title>ကိုးနဝင်း မိုးလင်းမှသိမယ်</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <style>
         :root {
@@ -630,10 +630,14 @@
             background-color: white;
             padding: 1rem;
             border-radius: 1rem;
-            display: inline-block;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             margin-bottom: 1.5rem;
+            min-height: 220px;
         }
 
+        .qr-code-container img,
         .qr-code-container canvas {
             display: block;
         }
@@ -769,7 +773,7 @@
             <h3>Backup QR Code</h3>
             <p>Scan this QR code with another device to transfer your data</p>
             <div class="qr-code-container">
-                <canvas id="qrCodeCanvas"></canvas>
+                <div id="qrCodeContainer"></div>
             </div>
             <button id="closeQrDisplayBtn" class="qr-modal-close">Close</button>
         </div>
@@ -1283,10 +1287,11 @@
         const qrScannerModal = document.getElementById('qrScannerModal');
         const closeQrDisplayBtn = document.getElementById('closeQrDisplayBtn');
         const closeQrScannerBtn = document.getElementById('closeQrScannerBtn');
-        const qrCodeCanvas = document.getElementById('qrCodeCanvas');
+        const qrCodeContainer = document.getElementById('qrCodeContainer');
         const qrScannerStatus = document.getElementById('qrScannerStatus');
         
         let html5QrScanner = null;
+        let qrCodeInstance = null;
 
         function generateQRData() {
             const data = {
@@ -1299,30 +1304,31 @@
         }
 
         function showQRCodeModal() {
-            const qrData = generateQRData();
-            
             if (!localStorage.getItem('startDate')) {
                 showMessage('No data to backup. Please set a start date first.', 'error');
                 return;
             }
             
+            const qrData = generateQRData();
+            
+            qrCodeContainer.innerHTML = '';
+            
             qrDisplayModal.classList.add('show');
             
-            QRCode.toCanvas(qrCodeCanvas, qrData, {
-                width: 250,
-                margin: 2,
-                color: {
-                    dark: '#000000',
-                    light: '#ffffff'
-                },
-                errorCorrectionLevel: 'M'
-            }, function(error) {
-                if (error) {
-                    console.error('QR Code generation error:', error);
-                    showMessage('Error generating QR code.', 'error');
-                    qrDisplayModal.classList.remove('show');
-                }
-            });
+            try {
+                qrCodeInstance = new QRCode(qrCodeContainer, {
+                    text: qrData,
+                    width: 200,
+                    height: 200,
+                    colorDark: '#000000',
+                    colorLight: '#ffffff',
+                    correctLevel: QRCode.CorrectLevel.L
+                });
+            } catch (error) {
+                console.error('QR Code generation error:', error);
+                showMessage('Error generating QR code. Data may be too large.', 'error');
+                qrDisplayModal.classList.remove('show');
+            }
         }
 
         function closeQRCodeModal() {
