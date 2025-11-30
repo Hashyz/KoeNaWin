@@ -1,6 +1,6 @@
 // sw.js (Service Worker file)
 
-const CACHE_NAME = 'daily-round-tracker-v5';
+const CACHE_NAME = 'daily-round-tracker-v6';
 const urlsToCache = [
   '/',
   '/index.html',
