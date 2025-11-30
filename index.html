@@ -1172,14 +1172,12 @@
         });
 
         forgetLink.addEventListener('click', () => {
-            localStorage.removeItem('startDate');
-            startDateInput.value = '';
-            calculateRound();
-            
-            mainContent.classList.add('hidden');
-            roundSelectionContent.classList.remove('hidden');
-            showMessage('Select the cell representing your current round.', 'info');
-            populateRoundGridButtons();
+            if (confirm('Are you sure you want to reset your start date? This will clear your current tracking.')) {
+                localStorage.removeItem('startDate');
+                startDateInput.value = '';
+                calculateRound();
+                showMessage('Start date has been reset.', 'info');
+            }
         });
 
         setTodayRoundBtn.addEventListener('click', () => {
