@@ -135,6 +135,16 @@
             animation: pulse-veg 2s infinite;
         }
 
+        .text-rest-day {
+            color: #8B5CF6;
+            animation: pulse-rest 2s infinite;
+        }
+
+        @keyframes pulse-rest {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
         @keyframes pulse-veg {
             0%, 100% { transform: scale(1); }
             50% { transform: scale(1.02); }
@@ -337,6 +347,16 @@
         .dark .calendar-day.veg-day {
             background-color: #7f1d1d;
             border-color: #991b1b;
+        }
+
+        .calendar-day.rest-day {
+            background-color: #EDE9FE;
+            border-color: #DDD6FE;
+        }
+
+        .dark .calendar-day.rest-day {
+            background-color: #4c1d95;
+            border-color: #5b21b6;
         }
 
         .calendar-day .day-name {
@@ -881,6 +901,9 @@
             }
         }
 
+        const CYCLE_LENGTH = 83;
+        const GRID_DAYS = 81;
+
         function getRoundForDate(startDateStr, targetDate) {
             const startParts = startDateStr.split('-');
             const start = new Date(parseInt(startParts[0]), parseInt(startParts[1]) - 1, parseInt(startParts[2]));
@@ -893,18 +916,26 @@
             
             if (daysPassed < 0) return null;
             
-            const numRows = roundGrid.length;
-            const numCols = roundGrid[0].length;
-            const totalCells = numRows * numCols;
+            const dayInCycle = daysPassed % CYCLE_LENGTH;
             
-            const gridIndex = daysPassed % totalCells;
-            const rowIndex = Math.floor(gridIndex / numCols);
-            const colIndex = gridIndex % numCols;
+            if (dayInCycle >= GRID_DAYS) {
+                return {
+                    number: 0,
+                    colIndex: -1,
+                    isVegDay: false,
+                    isRestDay: true
+                };
+            }
+            
+            const numCols = roundGrid[0].length;
+            const rowIndex = Math.floor(dayInCycle / numCols);
+            const colIndex = dayInCycle % numCols;
             
             return {
                 number: roundGrid[rowIndex][colIndex],
                 colIndex: colIndex,
-                isVegDay: colIndex === VEGETARIAN_COL_INDEX
+                isVegDay: colIndex === VEGETARIAN_COL_INDEX,
+                isRestDay: false
             };
         }
 
@@ -931,6 +962,7 @@
                 dayDiv.className = 'calendar-day';
                 if (i === 0) dayDiv.classList.add('today');
                 if (roundInfo.isVegDay) dayDiv.classList.add('veg-day');
+                if (roundInfo.isRestDay) dayDiv.classList.add('rest-day');
                 
                 const dayName = document.createElement('div');
                 dayName.className = 'day-name';
@@ -942,7 +974,7 @@
                 
                 const dayRound = document.createElement('div');
                 dayRound.className = 'day-round';
-                dayRound.textContent = numberToTextinMM[roundInfo.number];
+                dayRound.textContent = roundInfo.isRestDay ? 'နား' : numberToTextinMM[roundInfo.number];
                 
                 dayDiv.appendChild(dayName);
                 dayDiv.appendChild(dayDate);
@@ -1036,13 +1068,25 @@
                 return;
             }
 
-            const numRows = roundGrid.length;
+            const dayInCycle = daysPassed % CYCLE_LENGTH;
             const numCols = roundGrid[0].length;
-            const totalCells = numRows * numCols;
-
-            const gridIndex = daysPassed % totalCells;
-            const rowIndex = Math.floor(gridIndex / numCols);
-            const colIndex = gridIndex % numCols;
+            
+            currentRoundDisplay.classList.remove('text-vegetarian');
+            currentRoundDisplay.classList.remove('text-rest-day');
+            
+            if (dayInCycle >= GRID_DAYS) {
+                currentRoundDisplay.textContent = 'နားရက်';
+                currentRoundDisplay.classList.add('text-rest-day');
+                startDateDisplay.textContent = `Start Date: ${new Date(storedStartDate).toLocaleDateString('en-GB')}`;
+                daysPassedDisplay.textContent = `Days Passed: ${daysPassed}`;
+                showMessage('Today is a Rest Day! Enjoy your break.', 'info');
+                updateCalendarPreview();
+                updateHistoryDisplay();
+                return;
+            }
+            
+            const rowIndex = Math.floor(dayInCycle / numCols);
+            const colIndex = dayInCycle % numCols;
 
             const currentRoundNumber = roundGrid[rowIndex][colIndex];
             const currentRoundText = numberToTextMap[currentRoundNumber] || '';
@@ -1055,7 +1099,6 @@
             addToHistory(today, currentRoundNumber, currentRoundText);
 
             const vegAlertsEnabled = vegAlertsCheckbox.checked;
-            currentRoundDisplay.classList.remove('text-vegetarian');
 
             if (vegAlertsEnabled) {
                 if (colIndex === VEGETARIAN_COL_INDEX) {

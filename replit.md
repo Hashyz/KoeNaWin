@@ -27,8 +27,21 @@ This is a Progressive Web App (PWA) for tracking daily rounds based on a 9x9 gri
 - `README.md` - Basic project documentation
 
 ## Recent Changes
+- 2025-11-30: Rest day cycle implementation
+  - Added 83-day cycle (81 grid days + 2 rest days)
+  - After completing 81 days, users get Saturday/Sunday rest
+  - Shows "နားရက်" (Rest Day) message on rest days
+  - Calendar preview highlights rest days in purple
+  - Cycle restarts on Monday after rest days
+
+- 2025-11-30: UI cleanup and improvements
+  - Removed JSON export/import buttons (replaced by QR)
+  - Hide setup section once start date is set
+  - Added confirmation dialog for reset start date
+  - Only Show QR Code and Scan QR Code buttons remain
+
 - 2025-11-30: QR code backup/restore
-  - Added QR code generation using qrcode.js library (CDN)
+  - Added QR code generation using qrcodejs library (CDN)
   - Added QR code scanning using html5-qrcode library (CDN)
   - Show QR Code button generates scannable QR with all user data
   - Scan QR Code button uses camera to import data from another device
