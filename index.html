@@ -756,8 +756,9 @@
             }
         }
 
-        function getRoundForDate(startDate, targetDate) {
-            const start = new Date(startDate);
+        function getRoundForDate(startDateStr, targetDate) {
+            const startParts = startDateStr.split('-');
+            const start = new Date(parseInt(startParts[0]), parseInt(startParts[1]) - 1, parseInt(startParts[2]));
             start.setHours(0, 0, 0, 0);
             const target = new Date(targetDate);
             target.setHours(0, 0, 0, 0);
@@ -886,7 +887,8 @@
                 return;
             }
 
-            const startDate = new Date(storedStartDate);
+            const startParts = storedStartDate.split('-');
+            const startDate = new Date(parseInt(startParts[0]), parseInt(startParts[1]) - 1, parseInt(startParts[2]));
             startDate.setHours(0, 0, 0, 0);
 
             const today = new Date();
@@ -993,7 +995,8 @@
         startDateInput.addEventListener('change', () => {
             const selectedDateString = startDateInput.value;
             if (selectedDateString) {
-                const selectedDate = new Date(selectedDateString);
+                const parts = selectedDateString.split('-');
+                const selectedDate = new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
                 if (selectedDate.getDay() !== 1) {
                     showMessage('The start day must be a Monday. Please select a Monday.', 'error');
                     startDateInput.value = '';
