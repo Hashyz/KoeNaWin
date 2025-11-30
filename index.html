@@ -433,26 +433,6 @@
             transition: all 0.2s ease;
         }
 
-        .backup-btn.export {
-            background-color: var(--accent-green);
-            color: white;
-        }
-
-        .backup-btn.export:hover {
-            background-color: var(--accent-green-light);
-            transform: translateY(-2px);
-        }
-
-        .backup-btn.import {
-            background-color: var(--button-bg);
-            color: var(--text-primary);
-        }
-
-        .backup-btn.import:hover {
-            background-color: var(--button-hover);
-            transform: translateY(-2px);
-        }
-
         .view-fade-enter {
             opacity: 0;
             transform: translateY(20px);
@@ -762,11 +742,8 @@
         <div class="section-divider"></div>
 
         <div class="backup-section">
-            <button id="exportBtn" class="backup-btn export">Export Data</button>
-            <button id="importBtn" class="backup-btn import">Import Data</button>
             <button id="showQrBtn" class="backup-btn qr-show">Show QR Code</button>
             <button id="scanQrBtn" class="backup-btn qr-scan">Scan QR Code</button>
-            <input type="file" id="importFile" accept=".json" style="display: none;">
         </div>
     </div>
 
@@ -861,9 +838,6 @@
         const darkModeIcon = document.getElementById('darkModeIcon');
         const calendarDays = document.getElementById('calendarDays');
         const historyList = document.getElementById('historyList');
-        const exportBtn = document.getElementById('exportBtn');
-        const importBtn = document.getElementById('importBtn');
-        const importFile = document.getElementById('importFile');
         const notificationSound = document.getElementById('notificationSound');
 
         function initDarkMode() {
@@ -1242,50 +1216,6 @@
         }
 
         vegAlertsCheckbox.addEventListener('change', saveVegAlertsPreference);
-
-        function exportData() {
-            const data = {
-                startDate: localStorage.getItem('startDate'),
-                vegAlertsEnabled: localStorage.getItem('vegAlertsEnabled'),
-                darkMode: localStorage.getItem('darkMode'),
-                roundHistory: JSON.parse(localStorage.getItem('roundHistory') || '[]'),
-                exportDate: new Date().toISOString()
-            };
-            
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `koenawain-backup-${new Date().toISOString().split('T')[0]}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            showMessage('Data exported successfully!', 'info');
-        }
-
-        function importData(file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = JSON.parse(e.target.result);
-                    
-                    if (data.startDate) localStorage.setItem('startDate', data.startDate);
-                    if (data.vegAlertsEnabled) localStorage.setItem('vegAlertsEnabled', data.vegAlertsEnabled);
-                    if (data.darkMode) localStorage.setItem('darkMode', data.darkMode);
-                    if (data.roundHistory) localStorage.setItem('roundHistory', JSON.stringify(data.roundHistory));
-                    
-                    location.reload();
-                } catch (err) {
-                    showMessage('Invalid backup file.', 'error');
-                }
-            };
-            reader.readAsText(file);
-        }
-
-        exportBtn.addEventListener('click', exportData);
-        importBtn.addEventListener('click', () => importFile.click());
-        importFile.addEventListener('change', (e) => {
-            if (e.target.files[0]) importData(e.target.files[0]);
-        });
 
         const showQrBtn = document.getElementById('showQrBtn');
         const scanQrBtn = document.getElementById('scanQrBtn');
