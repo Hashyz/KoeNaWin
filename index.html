@@ -1294,11 +1294,12 @@
         let qrCodeInstance = null;
 
         function generateQRData() {
+            const history = JSON.parse(localStorage.getItem('roundHistory') || '[]');
             const data = {
-                startDate: localStorage.getItem('startDate'),
-                vegAlertsEnabled: localStorage.getItem('vegAlertsEnabled'),
-                darkMode: localStorage.getItem('darkMode'),
-                roundHistory: JSON.parse(localStorage.getItem('roundHistory') || '[]')
+                s: localStorage.getItem('startDate'),
+                v: localStorage.getItem('vegAlertsEnabled') === 'true' ? 1 : 0,
+                d: localStorage.getItem('darkMode') === 'true' ? 1 : 0,
+                h: history.slice(0, 5).map(h => ({ r: h.round, dt: h.date }))
             };
             return JSON.stringify(data);
         }
@@ -1339,10 +1340,21 @@
             try {
                 const data = JSON.parse(dataString);
                 
-                if (data.startDate) localStorage.setItem('startDate', data.startDate);
-                if (data.vegAlertsEnabled) localStorage.setItem('vegAlertsEnabled', data.vegAlertsEnabled);
-                if (data.darkMode) localStorage.setItem('darkMode', data.darkMode);
-                if (data.roundHistory) localStorage.setItem('roundHistory', JSON.stringify(data.roundHistory));
+                if (data.s) {
+                    localStorage.setItem('startDate', data.s);
+                    localStorage.setItem('vegAlertsEnabled', data.v === 1 ? 'true' : 'false');
+                    localStorage.setItem('darkMode', data.d === 1 ? 'true' : 'false');
+                    if (data.h && data.h.length > 0) {
+                        const history = data.h.map(h => ({ round: h.r, date: h.dt }));
+                        localStorage.setItem('roundHistory', JSON.stringify(history));
+                    }
+                }
+                else if (data.startDate) {
+                    localStorage.setItem('startDate', data.startDate);
+                    if (data.vegAlertsEnabled) localStorage.setItem('vegAlertsEnabled', data.vegAlertsEnabled);
+                    if (data.darkMode) localStorage.setItem('darkMode', data.darkMode);
+                    if (data.roundHistory) localStorage.setItem('roundHistory', JSON.stringify(data.roundHistory));
+                }
                 
                 return true;
             } catch (err) {
